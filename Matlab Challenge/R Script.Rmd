@@ -1,0 +1,81 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+getwd()
+```
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(plotly)
+```
+```{r}
+df <- read_excel('EaR.xlsx', sheet = 'new')
+```
+```{r}
+ggplot(df, aes(sample = value, colour = 'red')) +
+  stat_qq() +
+  stat_qq_line() + labs(y = 'EaR')
+```
+```{r}
+ggplot(df, aes(value)) +
+  geom_histogram(colour='black',fill='firebrick') + labs(x = 'EaR')
+```
+
+# Corn 
+```{r}
+corn_price_df <- read_excel('corn.xlsx', sheet = 'Sheet1')
+corn_price <- corn_price_df$value
+date <- corn_price_df$date
+ts.plot(corn_price)
+```
+```{r}
+rw_diff <- diff(corn_price)
+ts.plot(rw_diff)
+```
+
+```{r}
+model_wn <- arima(rw_diff, order= c(0,0,0))
+int_wn <- model_wn$coef
+model_wn
+
+#below is shift
+int_wn
+
+
+```
+```{r}
+#sd
+sqrt(0.002435)
+```
+
+# Wheat
+```{r}
+wheat_price_df <- read_excel('wheat.xlsx', sheet = 'Sheet1')
+wheat_price <- wheat_price_df$value
+date <- wheat_price_df$date
+ts.plot(wheat_price)
+```
+
+
+```{r}
+rw_diff_2 <- diff(wheat_price)
+ts.plot(rw_diff_2)
+```
+```{r}
+model_wn_2 <- arima(rw_diff_2, order= c(0,0,0))
+int_wn_2 <- model_wn_2$coef
+model_wn_2
+
+#below is shift
+int_wn_2
+
+
+```
+```{r}
+sqrt(0.006118)
+```
+
